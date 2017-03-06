@@ -1,20 +1,34 @@
 class BeersController < ApplicationController
-  before_action :set_beer, only: [:show, :edit, :update, :destroy]
-  before_action :set_breweries_and_styles_for_template, only: [:new, :edit, :create, :update]
-  before_action :ensure_that_signed_in, except: [:index, :show]
+  before_action :set_beer, only: [:show, :edit, :list, :update, :destroy]
+  before_action :set_breweries_and_styles_for_template, only: [:new, :edit, :list, :create, :update]
+  before_action :ensure_that_signed_in, except: [:index, :show, :list]
   before_action :ensure_that_admin_signed_in, only: :destroy
     
   # GET /beers
   # GET /beers.json
   def index
     @beers = Beer.all
+
+    order = params[:order] || 'name'
+
+    @beers = case order
+               when 'name' then @beers.sort_by{ |b| b.name }
+               when 'brewery' then @beers.sort_by{ |b| b.brewery.name }
+               when 'style' then @beers.sort_by{ |b| b.style.name }
+             end
   end
 
   # GET /beers/1
   # GET /beers/1.json
   def show
+    @beers = Beer.all
+    @beer = Beer.first
     @rating = Rating.new
-    @rating.beer = @beer    
+    @rating.beer = @beer
+  end
+
+  def list
+    @beer = Beer.first
   end
 
   # GET /beers/new
@@ -74,7 +88,9 @@ class BeersController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_beer
-      @beer = Beer.find(params[:id])
+      @beer = Beer.first
+      #byebug
+      #@beer = Beer.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

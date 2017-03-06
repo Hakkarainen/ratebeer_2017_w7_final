@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   end
 
   resources :beers
+  get 'beerlist', to:'beers#list'
+  resources :breweries
+  get 'brewerylist', to:'breweries#list'
   resources :breweries do
     post 'toggle_activity', on: :member
   end

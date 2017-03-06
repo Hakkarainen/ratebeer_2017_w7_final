@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.6'
+#gem 'rails', '4.2.6'
+gem 'rails', '5.0.0.1'
 # Use sqlite3 as the database for Active Record
 group :development, :test do
   gem 'sqlite3'
@@ -22,8 +23,12 @@ gem 'coffee-rails', '~> 4.1.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'jquery'
+#gem 'bootstrap'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
+gem 'jquery-turbolinks'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -35,7 +40,7 @@ gem 'bcrypt', '~> 3.1.7'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'pry-rails'
+#  gem 'pry-rails'
 end
 
 group :development, :test do
@@ -59,7 +64,9 @@ group :development do
   gem 'spring'
 end
 
-gem 'bootstrap-sass'
+gem 'autoprefixer-rails'
+#gem 'bootstrap-sass'
+gem 'bootstrap-sass', '~> 3.3.6'
 group :development do
   gem 'rails_layout'
 end

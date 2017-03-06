@@ -1,18 +1,53 @@
 class BreweriesController < ApplicationController
-  before_action :set_brewery, only: [:show, :edit, :update, :destroy]
-  before_action :ensure_that_signed_in, except: [:index, :show]
+  before_action :set_brewery, only: [:show, :edit, :list, :update, :destroy]
+  before_action :ensure_that_signed_in, except: [:index, :show, :list]
   before_action :ensure_that_admin_signed_in, only: :destroy  
   
   # GET /breweries
   # GET /breweries.json
   def index
+    @breweries = Brewery.all
+    @brewery = Brewery.first
     @active_breweries = Brewery.active
     @retired_breweries = Brewery.retired
+    @beers = Beer.all
+
+
+    order = params[:order] || 'name'
+    s_order = session[:order]
+    if s_order == order
+
+      @active_breweries = case order
+                            when 'name' then @active_breweries.reverse_order!
+                            when 'year' then @active_breweries.reverse_order!
+                          end
+      @retired_breweries = case order
+                             when 'name' then @retired_breweries.reverse_order!
+                             when 'year' then @retired_breweries.reverse_order!
+                           end
+    else
+
+      @active_breweries = case order
+                            when 'name' then @active_breweries.sort_by{ |b| b.name }
+                            when 'year' then @active_breweries.sort_by{ |b| b.year }
+                          end
+      @retired_breweries = case order
+                            when 'name' then @retired_breweries.sort_by{ |b| b.name }
+                            when 'year' then @retired_breweries.sort_by{ |b| b.year }
+                          end
+    end
+    session[:order] = order
   end
 
   # GET /breweries/1
   # GET /breweries/1.json
   def show
+    @brewery = Brewery.first
+  end
+
+  def list
+    @beers = Beer.all
+    @brewery = Brewery.first
   end
 
   # GET /breweries/new
@@ -76,7 +111,8 @@ class BreweriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_brewery
-      @brewery = Brewery.find(params[:id])
+      @brewery = Brewery.first
+      #@brewery = Brewery.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
